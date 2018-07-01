@@ -1,8 +1,8 @@
 include ./includes/header.pug
     
 .container
-  h1=name
-  p=hash + ' @ ' + path
+  h2=name + ' (' + hash + ')'
+  p: a(href='/tree/' + name + '/' + hash) See tree at commit
   p!=log
         
 include ./includes/footer.pug

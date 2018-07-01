@@ -1,6 +1,7 @@
 
 const simpleGit = require('simple-git');
 const config = require('./config').obj;
+const EOL = require('os').EOL;
 
 module.exports = class GitClient {
     constructor(workingPath) {
@@ -22,6 +23,23 @@ module.exports = class GitClient {
     show(commit, fn) {
         this.client.show([commit], function(err, log) {
             fn(log);
+        });
+    }
+
+    treeAt(commit, fn) {
+        var results = [];
+
+        this.client.raw(['ls-tree', '-r', commit, '--name-only'], function(err, log) {
+            var contents = log.split(EOL);
+
+            for (var i in contents) {
+                results.push({
+                    path: contents[i],
+                    pathURI: encodeURIComponent(contents[i])
+                });
+            }
+
+            fn(results);
         });
     }
 

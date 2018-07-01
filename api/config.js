@@ -7,6 +7,8 @@ var dataSet = {
     }
 }
 
+var cache = {};
+
 exports.obj = {
     port: dataSet.port,
     maxCommits: dataSet.maxCommits,
@@ -35,4 +37,12 @@ exports.obj = {
 
         return repos;
     },
+
+    getCache(key) {
+        return cache[key];
+    },
+
+    setCache(key, value) {
+        cache[key] = value;
+    }
 }
