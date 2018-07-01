@@ -1,11 +1,14 @@
 
+const express = require('express');
 const basicAuth = require('express-basic-auth');
 const GitClient = require('./git');
 const config = require('./config').obj;
 
 const REPO_NO_EXIST = {success: false, message: "Repo key does not exist."};
 
-module.exports = function(app) {
+module.exports = function() {
+
+    var app = express.Router();
 
     if (config.useAuth) {
         app.use(basicAuth({ 
@@ -111,4 +114,6 @@ module.exports = function(app) {
             res.json(REPO_NO_EXIST);
         }
     });
+
+    return app;
 }
