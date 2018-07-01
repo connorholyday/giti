@@ -44,4 +44,17 @@ app.get('/commits/:key/:hash', function(req, res) {
     });
 });
 
+app.get('/branches/:key', function(req, res) {
+    var repo = config.getRepo(req.params.key);
+    var git = new GitClient(repo);
+    git.branches(function(log) {
+        console.log(log);
+        var results = [];
+        for (var key in log.branches)
+            results.push(log.branches[key]);
+            
+        res.render('branches', {name: req.params.key, branches: results});
+    });
+});
+
 app.listen(config.port, () => console.log('giti listening on port ' + config.port));
