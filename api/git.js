@@ -9,7 +9,7 @@ module.exports = class GitClient {
     }
 
     log(fn) {
-        this.client.log(['-' + config.maxCommits], function(err, log) {
+        this.client.log(['-' + config.maxCommits()], function(err, log) {
             fn(log);
         });
     }
