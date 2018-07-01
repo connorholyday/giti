@@ -7,7 +7,7 @@ module.exports = class GitClient {
     }
 
     log(fn) {
-        this.client.log(function(err, log) {
+        this.client.log(['-50'], function(err, log) {
             fn(log);
         });
     }
