@@ -14,3 +14,14 @@ Git-i is a git repository browser made for IBM i (although it can run on other s
 
 1. Make it so the user only edits a `config.json` file and not the actual source.
 2. Ability to add and remove repos without having to edit the config.
+
+---
+
+## Screenshots
+
+![](https://i.imgur.com/TvqtVsV.png)
+![](https://i.imgur.com/hCvlkmk.png)
+![](https://i.imgur.com/OTav5Wo.png)
+![](https://i.imgur.com/RbY8mpi.png)
+![](https://i.imgur.com/9tOe7F0.png)
+![](https://i.imgur.com/IyxgIE1.png)
