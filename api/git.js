@@ -43,6 +43,12 @@ module.exports = class GitClient {
         });
     }
 
+    fileAt(commit, path, fn) {
+        this.client.show([commit + ':' + path], function(err, log) {
+            fn(log);
+        });
+    }
+
     branches(fn) {
         this.client.branch(function(err, log) {
             fn(log);

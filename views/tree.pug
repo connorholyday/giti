@@ -10,6 +10,6 @@ include ./includes/header.pug
     tbody
       each row in tree
         tr
-          td: a(href='/blog/' + name + '/' + hash + '/' + row.pathURI)=row.path
+          td: a(href='/blob/' + name + '/' + hash + '/' + row.pathURI)=row.path
         
 include ./includes/footer.pug  

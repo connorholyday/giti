@@ -71,13 +71,31 @@ app.get('/tree/:key/:hash', function(req, res) {
 
     var results = config.getCache(cacheKey);
     if (results === undefined) {
-        console.log('no cache');
         git.treeAt(hash, function(log) {
             config.setCache(cacheKey, log);
             res.render('tree', {name: req.params.key, hash: hash, tree: log});
         });
     } else {
         res.render('tree', {name: req.params.key, hash: hash, tree: results});
+    }
+});
+
+app.get('/blob/:key/:hash/:path', function(req, res) {
+    var hash = req.params.hash;
+    var repo = config.getRepo(req.params.key);
+    var path = req.params.path;
+    var cacheKey = req.params.key + '-' + hash + '-' + path + '-file';
+
+    var git = new GitClient(repo);
+
+    var results = config.getCache(cacheKey);
+    if (results === undefined) {
+        git.fileAt(hash, path, function(log) {
+            config.setCache(cacheKey, log);
+            res.render('blob', {name: req.params.key, hash: hash, path: path, content: log});
+        });
+    } else {
+        res.render('blob', {name: req.params.key, hash: hash, path: path, content: results});
     }
 });
 
