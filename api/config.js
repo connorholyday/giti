@@ -1,5 +1,6 @@
 
 var dataSet = {
+    port: 3000,
     useAuth: true,
     repos: {
         'test': '/Users/barry/Documents/test/ILEditor.git'
@@ -10,6 +11,8 @@ var dataSet = {
 }
 
 exports.obj = {
+    port: dataSet.port,
+
     addRepo: function(key, path) {
         var result = {success: true};
 
@@ -22,14 +25,14 @@ exports.obj = {
 
         return result;
     },
-
     getRepo: function(key) {
         return dataSet.repos[key];
     },
-
-    useAuth: function() {
-        return dataSet.useAuth;
+    getRepos: function() {
+        return dataSet.repos
     },
+
+    useAuth: dataSet.useAuth,
 
     addUser: function(user, pass) {
         var result = {success: true};
@@ -43,9 +46,7 @@ exports.obj = {
 
         return result;
     },
-
     userAuth: function(username, password) {
-        console.log(this.dataSet);
         if (dataSet.users[username] !== undefined)
             if (dataSet.users[username] === password)
                 return true;
