@@ -1,17 +1,20 @@
-exports.obj = {
-    dataSet: {
-        useAuth: false,
-        repos: {},
-        users: {
-            'admin': 'pass'
-        }
-    },
 
+var dataSet = {
+    useAuth: true,
+    repos: {
+        'test': '/Users/barry/Documents/test/ILEditor.git'
+    },
+    users: {
+        'admin': 'pass'
+    }
+}
+
+exports.obj = {
     addRepo: function(key, path) {
         var result = {success: true};
 
-        if (this.dataSet.repos[key] === undefined)
-            this.dataSet.repos[key] = path;
+        if (dataSet.repos[key] === undefined)
+            dataSet.repos[key] = path;
         else {
             result.message = "Key already exists.";
             result.success = false;
@@ -21,18 +24,18 @@ exports.obj = {
     },
 
     getRepo: function(key) {
-        return this.dataSet.repos[key];
+        return dataSet.repos[key];
     },
 
     useAuth: function() {
-        return this.dataSet.useAuth;
+        return dataSet.useAuth;
     },
 
     addUser: function(user, pass) {
         var result = {success: true};
 
-        if (this.dataSet.users[user] === undefined)
-            this.dataSet.users[user] = pass;
+        if (dataSet.users[user] === undefined)
+            dataSet.users[user] = pass;
         else {
             result.success = false;
             result.message = "User already exists.";
@@ -42,8 +45,9 @@ exports.obj = {
     },
 
     userAuth: function(username, password) {
-        if (this.dataSet.users[username] !== undefined)
-            if (this.dataSet.users[username] === password)
+        console.log(this.dataSet);
+        if (dataSet.users[username] !== undefined)
+            if (dataSet.users[username] === password)
                 return true;
 
         return false;
