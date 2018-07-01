@@ -1,17 +1,15 @@
 
 var dataSet = {
     port: 3000,
-    useAuth: true,
+    maxCommits: 100,
     repos: {
-        'test': '/Users/barry/Documents/test/ILEditor.git'
-    },
-    users: {
-        'admin': 'pass'
+        'ILEditor': '/Users/barry/Documents/test/ILEditor.git'
     }
 }
 
 exports.obj = {
     port: dataSet.port,
+    maxCommits: dataSet.maxCommits,
 
     addRepo: function(key, path) {
         var result = {success: true};
@@ -29,28 +27,12 @@ exports.obj = {
         return dataSet.repos[key];
     },
     getRepos: function() {
-        return dataSet.repos
-    },
+        var repos = [];
 
-    useAuth: dataSet.useAuth,
-
-    addUser: function(user, pass) {
-        var result = {success: true};
-
-        if (dataSet.users[user] === undefined)
-            dataSet.users[user] = pass;
-        else {
-            result.success = false;
-            result.message = "User already exists.";
+        for (var repo in dataSet.repos) {
+            repos.push({path: dataSet.repos[repo], name: repo});
         }
 
-        return result;
+        return repos;
     },
-    userAuth: function(username, password) {
-        if (dataSet.users[username] !== undefined)
-            if (dataSet.users[username] === password)
-                return true;
-
-        return false;
-    }
 }

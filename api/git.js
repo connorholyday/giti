@@ -1,5 +1,6 @@
 
 const simpleGit = require('simple-git');
+const config = require('./config').obj;
 
 module.exports = class GitClient {
     constructor(workingPath) {
@@ -7,7 +8,7 @@ module.exports = class GitClient {
     }
 
     log(fn) {
-        this.client.log(['-50'], function(err, log) {
+        this.client.log(['-' + config.maxCommits], function(err, log) {
             fn(log);
         });
     }
@@ -18,15 +19,8 @@ module.exports = class GitClient {
         });
     }
 
-    commitDiff(options, fn) {
-        var params = [options.previous, options.current];
-
-        if (options.file !== undefined) {
-            params.push('--')
-            params.push(options.file);
-        }
-
-        this.client.diff(params, function(err, log) {
+    show(commit, fn) {
+        this.client.show([commit], function(err, log) {
             fn(log);
         });
     }
