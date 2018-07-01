@@ -1,3 +1,4 @@
+var fs = require('fs');
 
 var dataSet = {
     port: 3000,
@@ -10,8 +11,21 @@ var dataSet = {
 var cache = {};
 
 exports.obj = {
-    port: dataSet.port,
-    maxCommits: dataSet.maxCommits,
+    loadConfig: function(path) {
+        if (PathExists(path)) {
+            dataSet = JSON.parse(ReadContent(path));
+        } else {
+            console.log('Config does not exist! Creating: ' + path);
+            this.saveConfig(path);
+        }
+    },
+
+    saveConfig: function(path) {
+        WriteContent(path, JSON.stringify(dataSet, null, 4));
+    },
+
+    port: function() {return dataSet.port},
+    maxCommits: function() {return dataSet.maxCommits},
 
     addRepo: function(key, path) {
         var result = {success: true};
@@ -46,3 +60,15 @@ exports.obj = {
         cache[key] = value;
     }
 }
+
+function ReadContent(file) {
+    return fs.readFileSync(file, 'utf8');
+  }
+  
+function PathExists(pathaddr) {
+    return fs.existsSync(pathaddr);
+}
+
+function WriteContent(pathOut, content) {
+    fs.writeFileSync(pathOut, content);
+  }

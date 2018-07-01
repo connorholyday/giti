@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
+var path = require('path');
 let diff2html = require("diff2html").Diff2Html;
 
 const config = require('./api/config').obj;
 const GitClient = require('./api/git');
+
+config.loadConfig(path.join(__dirname, 'config.json'));
 
 app.use(express.static('public'));
 
@@ -99,4 +102,4 @@ app.get('/blob/:key/:hash/:path', function(req, res) {
     }
 });
 
-app.listen(config.port, () => console.log('giti listening on port ' + config.port));
+app.listen(config.port(), () => console.log('giti listening on port ' + config.port()));
