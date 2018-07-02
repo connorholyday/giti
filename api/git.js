@@ -51,6 +51,34 @@ module.exports = class GitClient {
         });
     }
 
+    static parseTree(pathsArray) {
+        var data = [];
+
+        for(var i = 0 ; i< pathsArray.length; i++) {
+            if (pathsArray[i].path === "") continue;
+            buildTree(pathsArray[i].path.split('/'), data, pathsArray[i].pathURI);
+        }
+        
+        return data;
+        
+        function buildTree(parts, treeNode, uri) {
+            if(parts.length === 0)
+                return; 
+
+            for(var i = 0 ; i < treeNode.length; i++)
+            {
+                if(parts[0] == treeNode[i].text)
+                {
+                    buildTree(parts.splice(1, parts.length), treeNode[i].children, uri);
+                    return;
+                }
+            }
+            var newNode = {'text': parts[0], 'children': [], pathURI: uri};
+            treeNode.push(newNode);
+            buildTree(parts.splice(1, parts.length), newNode.children, uri);
+        }
+    }
+
     fileAt(commit, path, fn) {
         this.client.show([commit + ':' + path], function(err, log) {
             fn(log);

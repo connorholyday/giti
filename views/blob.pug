@@ -4,8 +4,8 @@ link(rel="stylesheet" href="/prism.css")
 script(defer, src="/prism.js")
 
 .container
-  h2=path
-  p=hash + ' (' + name + ')'
+  h2=name + ': ' + file
+  p='at commit ' + hash
   pre.line-numbers
     code(class="language-" + ext)=content
         

@@ -1,7 +1,8 @@
 include ./includes/header.pug
     
 .container
-  h1=name + ' branches'
+  include ./includes/repohead.pug
+  h3='Branches'
   table(class='table table-striped table-hover table-condensed')
     thead
       tr

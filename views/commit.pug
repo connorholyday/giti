@@ -1,8 +1,10 @@
 include ./includes/header.pug
     
 .container
-  h2=name + ' (' + hash + ')'
+  include ./includes/repohead.pug
+  h2='Commit ' + hash + ''
   p: a(href='/tree/' + name + '/' + hash) See tree at commit
+  hr
   p!=log
         
 include ./includes/footer.pug

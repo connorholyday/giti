@@ -1,0 +1,24 @@
+.row
+  .panel.panel-primary
+    .panel-body
+      .col-md-11
+        if path
+          h4=name + ' - ' + path
+        else
+          h4=name
+
+      .col-md-1
+        .btn-group
+          button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+            | Action 
+            span.caret
+          ul.dropdown-menu
+            li
+              a(href='/dash/' + name) Dashboard
+            li
+              a(href='/commits/' + name) Commits
+            li
+              a(href='/branches/' + name) Branches
+            li.divider(role='separator')
+            li
+              a(href='/remrepo/' + name) Remove repo

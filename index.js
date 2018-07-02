@@ -29,7 +29,7 @@ app.get('/dash/:key', function(req, res) {
         if (fs.existsSync(repo)) {
             var git = new GitClient(repo);
 
-            var results = {name: name, path: repo, commits: [], branches: []};
+            var results = {name: name, path: repo, commits: [], branches: [], pathTree: {}};
 
             git.log(5, function(commits) {
                 results.commits = commits.all;
@@ -37,7 +37,17 @@ app.get('/dash/:key', function(req, res) {
                     for (var key in branches.branches)
                         results.branches.push(branches.branches[key]);
 
-                    res.render('dash', results);
+                    results.hash = results.commits[0].hash || undefined;
+                    
+                    fetchTreeList(git, name, results.hash, function(log) {
+                        if (results.hash === undefined)
+                            results.treeMessage = 'Tree viewable here after commits have been made.';
+                        else
+                            results.pathTree = log;
+                            
+                        res.render('dash', results);
+                    });
+
                 });
             });
         } else {
@@ -98,20 +108,15 @@ app.get('/branches/:key', function(req, res) {
 });
 
 app.get('/tree/:key/:hash', function(req, res) {
+    var key = req.params.key
     var hash = req.params.hash;
-    var repo = config.getRepo(req.params.key);
+    var repo = config.getRepo(key);
     var git = new GitClient(repo);
-    var cacheKey = req.params.key + '-' + hash + '-tree';
+    var cacheKey = key + '-' + hash + '-tree';
 
-    var results = config.getCache(cacheKey);
-    if (results === undefined) {
-        git.treeAt(hash, function(log) {
-            config.setCache(cacheKey, log);
-            res.render('tree', {name: req.params.key, hash: hash, tree: log});
-        });
-    } else {
-        res.render('tree', {name: req.params.key, hash: hash, tree: results});
-    }
+    fetchTreeList(git, key, hash, function(log) {
+        res.render('tree', {name: key, hash: hash, pathTree: log});
+    });
 });
 
 app.get('/blob/:key/:hash/:path', function(req, res) {
@@ -130,10 +135,10 @@ app.get('/blob/:key/:hash/:path', function(req, res) {
     if (results === undefined) {
         git.fileAt(hash, path, function(log) {
             config.setCache(cacheKey, log);
-            res.render('blob', {name: req.params.key, hash: hash, path: path, content: log, ext: ext});
+            res.render('blob', {name: req.params.key, hash: hash, file: path, content: log, ext: ext});
         });
     } else {
-        res.render('blob', {name: req.params.key, hash: hash, path: path, content: results, ext: ext});
+        res.render('blob', {name: req.params.key, hash: hash, file: path, content: results, ext: ext});
     }
 });
 
@@ -175,3 +180,19 @@ app.get('/remrepo/:key', function(req, res) {
 });
 
 app.listen(config.port(), () => console.log('giti listening on port ' + config.port()));
+
+function fetchTreeList(git, name, hash, fn) {
+    var cacheKey = name + '-' + hash + '-tree';
+
+    var results = config.getCache(cacheKey);
+    if (results === undefined) {
+        return git.treeAt(hash, function(log) {
+            results = GitClient.parseTree(log);
+            config.setCache(cacheKey, results);
+
+            fn(results);
+        });
+    } else {
+        fn(results);
+    }
+}

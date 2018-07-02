@@ -1,0 +1,9 @@
+mixin parseDir(obj)
+  ul
+    each path in obj
+      if path.children.length !== 0
+        li.treedir.treeitem: a(data-toggle='collapse', href='#' + path.text)=path.text + '/'
+        div(class='collapse', id=path.text)
+          +parseDir(path.children)
+      else
+        li.treefile.treeitem: a(href='/blob/' + name + '/' + hash + '/' + path.pathURI, target='_blank')=path.text

@@ -1,6 +1,24 @@
+ul {
+  list-style: none;
+}
+.treeitem {
+  padding-left: 1.3em;
+  padding-top: 5px;
+  font-size: medium;
+}
 
-.dashbar {
-  border-bottom: 1px solid rgb(128, 128, 128);
-  border-top: 1px solid rgb(128, 128, 128);
-  padding-top: 10px;
+.treedir ::before {
+  content: "\f0e8"; /* FontAwesome Unicode */
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em; /* same as padding-left set on li */
+  width: 1.3em; /* same as padding-left set on li */
+}
+
+.treefile ::before {
+  content: "\f15b"; /* FontAwesome Unicode */
+  font-family: FontAwesome;
+  display: inline-block;
+  margin-left: -1.3em; /* same as padding-left set on li */
+  width: 1.3em; /* same as padding-left set on li */
 }
