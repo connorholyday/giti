@@ -15,8 +15,8 @@ include ./includes/header.pug
         label(for='path') Path:
         input#path.form-control(type='text', placeholder='/path/to/repo', name='path')
       div.form-group
-        label(for='init') Init bare repository (directory must exist first)
         input#path.form-control(type='checkbox', name='init')
+        | Init bare repository (directory must exist first)
       button.btn.btn-primary(type='submit') Add
         
 include ./includes/footer.pug
