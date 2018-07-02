@@ -1,6 +1,5 @@
 
 const simpleGit = require('simple-git');
-const config = require('./config').obj;
 const EOL = require('os').EOL;
 
 module.exports = class GitClient {
@@ -8,8 +7,8 @@ module.exports = class GitClient {
         this.client = simpleGit(workingPath);
     }
 
-    log(fn) {
-        this.client.log(['-' + config.maxCommits()], function(err, log) {
+    log(count, fn) {
+        this.client.log(['-' + count], function(err, log) {
             fn(log);
         });
     }

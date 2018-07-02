@@ -3,11 +3,14 @@ const app = express();
 var path = require('path');
 let diff2html = require("diff2html").Diff2Html;
 
+const CONFIG_PATH = path.join(__dirname, 'config.json');
 const config = require('./api/config').obj;
 const GitClient = require('./api/git');
 
-config.loadConfig(path.join(__dirname, 'config.json'));
+config.loadConfig(CONFIG_PATH);
 
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(express.static('public'));
 
 app.set('views', __dirname + '/views')
@@ -20,7 +23,7 @@ app.get('/', function (req, res) {
 app.get('/commits/:key', function (req, res) {
     var repo = config.getRepo(req.params.key);
     var git = new GitClient(repo);
-    git.log(function(log) {
+    git.log(config.maxCommits(), function(log) {
         log.name = req.params.key;
         log.path = repo;
         res.render('commits', log);
@@ -100,6 +103,22 @@ app.get('/blob/:key/:hash/:path', function(req, res) {
     } else {
         res.render('blob', {name: req.params.key, hash: hash, path: path, content: results});
     }
+});
+
+app.get('/addrepo', function(req, res) {
+    res.render('addrepo');
+});
+
+app.post('/addrepo', function(req, res) {
+    console.log(req);
+    if (req.body.name !== undefined) {
+        if (config.getRepo(req.body.name) === undefined) {
+            config.addRepo(req.body.name, req.body.path);
+            config.saveConfig(CONFIG_PATH);
+        }
+    }
+
+    res.redirect('/');
 });
 
 app.listen(config.port(), () => console.log('giti listening on port ' + config.port()));

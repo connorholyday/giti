@@ -1,0 +1,17 @@
+include ./includes/header.pug
+
+.main.container
+  .row
+    h1.display-4.m-b-2 Add repo
+
+    // register form
+    form(method='post' action='/addrepo')
+      div.form-group
+        label(for='name') Name:
+        input#name.form-control(type='text', placeholder='repoName', name='name')
+      div.form-group
+        label(for='path') Path:
+        input#path.form-control(type='text', placeholder='/path/to/repo', name='path')
+      button.btn.btn-primary(type='submit') Add
+        
+include ./includes/footer.pug
