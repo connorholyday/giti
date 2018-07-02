@@ -20,6 +20,24 @@ app.get('/', function (req, res) {
     res.render('index', {results: config.getRepos()});
 });
 
+app.get('/dash/:key', function(req, res) {
+    var name = req.params.key;
+    var repo = config.getRepo(name);
+    var git = new GitClient(repo);
+
+    var results = {name: name, path: repo, commits: [], branches: []};
+
+    git.log(5, function(commits) {
+        results.commits = commits.all;
+        git.branches(function(branches) {
+            for (var key in branches.branches)
+                results.branches.push(branches.branches[key]);
+
+            res.render('dash', results);
+        });
+    });
+});
+
 app.get('/commits/:key', function (req, res) {
     var repo = config.getRepo(req.params.key);
     var git = new GitClient(repo);

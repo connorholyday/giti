@@ -8,14 +8,11 @@ include ./includes/header.pug
         th Name
         th Path
         th
-        th
     tbody
       each row in results
         tr
           td=row.name
           td=row.path
-          td: a(href='/commits/' + row.name) Commits
-          td: a(href='/branches/' + row.name) Branches
-          td: a(href='/remrepo/' + row.name) Remove
+          td: a(href='/dash/' + row.name) See dashboard
         
 include ./includes/footer.pug  
