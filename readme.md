@@ -9,6 +9,7 @@ Git-i is a git repository browser made for IBM i (although it can run on other s
 * Commit history
 * Commit diffs (they're pretty too)
 * Browse tree at certain commit
+* View any file at any commit
 
 ### Setup
 
