@@ -7,8 +7,17 @@ module.exports = class GitClient {
         this.client = simpleGit(workingPath);
     }
 
+    init(bare, fn) {
+        this.client.init(bare, function(err, log) {
+            fn(log);
+        });
+    }
+
     log(count, fn) {
         this.client.log(['-' + count], function(err, log) {
+            if (log === null)
+                log = {all: []};
+
             fn(log);
         });
     }

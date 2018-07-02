@@ -110,11 +110,21 @@ app.get('/addrepo', function(req, res) {
 });
 
 app.post('/addrepo', function(req, res) {
-    console.log(req);
-    if (req.body.name !== undefined) {
-        if (config.getRepo(req.body.name) === undefined) {
-            config.addRepo(req.body.name, req.body.path);
-            config.saveConfig(CONFIG_PATH);
+    var key = req.body.name;
+    var path = req.body.path;
+    var init = (req.body.init !== undefined);
+
+    if (key !== undefined) {
+        if (key.trim() !== "") {
+            if (config.getRepo(key) === undefined) {
+                config.addRepo(key, path);
+                config.saveConfig(CONFIG_PATH);
+
+                if (init) {
+                    var git = new GitClient(path);
+                    git.init(true, function(log) {})
+                }
+            }
         }
     }
 

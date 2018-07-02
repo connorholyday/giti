@@ -4,6 +4,8 @@ include ./includes/header.pug
   .row
     h1.display-4.m-b-2 Add repo
 
+    p Bare repos are preffered, but you can add regular repos too.
+
     // register form
     form(method='post' action='/addrepo')
       div.form-group
@@ -12,6 +14,9 @@ include ./includes/header.pug
       div.form-group
         label(for='path') Path:
         input#path.form-control(type='text', placeholder='/path/to/repo', name='path')
+      div.form-group
+        label(for='init') Init bare repository (directory must exist first)
+        input#path.form-control(type='checkbox', name='init')
       button.btn.btn-primary(type='submit') Add
         
 include ./includes/footer.pug
