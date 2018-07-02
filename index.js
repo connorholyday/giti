@@ -25,22 +25,26 @@ app.get('/dash/:key', function(req, res) {
     var name = req.params.key;
     var repo = config.getRepo(name);
 
-    if (fs.existsSync(repo)) {
-        var git = new GitClient(repo);
+    if (repo !== undefined) {
+        if (fs.existsSync(repo)) {
+            var git = new GitClient(repo);
 
-        var results = {name: name, path: repo, commits: [], branches: []};
+            var results = {name: name, path: repo, commits: [], branches: []};
 
-        git.log(5, function(commits) {
-            results.commits = commits.all;
-            git.branches(function(branches) {
-                for (var key in branches.branches)
-                    results.branches.push(branches.branches[key]);
+            git.log(5, function(commits) {
+                results.commits = commits.all;
+                git.branches(function(branches) {
+                    for (var key in branches.branches)
+                        results.branches.push(branches.branches[key]);
 
-                res.render('dash', results);
+                    res.render('dash', results);
+                });
             });
-        });
+        } else {
+            res.render('error', {text: 'Git repo at path "' + repo + '" does not exist. You can fix this by creating the directory and then using git to initalise the repository.', name: name});
+        }
     } else {
-        res.render('error', {text: 'Git repo at path "' + repo + '" does not exist.', name: name});
+        res.render('error', {text: 'Git repo "' + name + '" does not exist.', name: name});
     }
 });
 
