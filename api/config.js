@@ -39,6 +39,9 @@ exports.obj = {
 
         return result;
     },
+    remRepo: function(key) {
+        delete dataSet.repos[key];
+    },
     getRepo: function(key) {
         return dataSet.repos[key];
     },

@@ -121,4 +121,15 @@ app.post('/addrepo', function(req, res) {
     res.redirect('/');
 });
 
+app.get('/remrepo/:key', function(req, res) {
+    var key = req.params.key;
+
+    if (config.getRepo(key) !== undefined) {
+        config.remRepo(key);
+        config.saveConfig(CONFIG_PATH);
+    }
+
+    res.redirect('/');
+});
+
 app.listen(config.port(), () => console.log('giti listening on port ' + config.port()));
