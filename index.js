@@ -1,9 +1,10 @@
 const express = require('express');
 const app = express();
-var path = require('path');
+var pathLib = require('path');
+var fs = require('fs');
 let diff2html = require("diff2html").Diff2Html;
 
-const CONFIG_PATH = path.join(__dirname, 'config.json');
+const CONFIG_PATH = pathLib.join(__dirname, 'config.json');
 const config = require('./api/config').obj;
 const GitClient = require('./api/git');
 
@@ -23,19 +24,24 @@ app.get('/', function (req, res) {
 app.get('/dash/:key', function(req, res) {
     var name = req.params.key;
     var repo = config.getRepo(name);
-    var git = new GitClient(repo);
 
-    var results = {name: name, path: repo, commits: [], branches: []};
+    if (fs.existsSync(repo)) {
+        var git = new GitClient(repo);
 
-    git.log(5, function(commits) {
-        results.commits = commits.all;
-        git.branches(function(branches) {
-            for (var key in branches.branches)
-                results.branches.push(branches.branches[key]);
+        var results = {name: name, path: repo, commits: [], branches: []};
 
-            res.render('dash', results);
+        git.log(5, function(commits) {
+            results.commits = commits.all;
+            git.branches(function(branches) {
+                for (var key in branches.branches)
+                    results.branches.push(branches.branches[key]);
+
+                res.render('dash', results);
+            });
         });
-    });
+    } else {
+        res.render('error', {text: 'Git repo at path "' + repo + '" does not exist.', name: name});
+    }
 });
 
 app.get('/commits/:key', function (req, res) {
@@ -110,16 +116,20 @@ app.get('/blob/:key/:hash/:path', function(req, res) {
     var path = req.params.path;
     var cacheKey = req.params.key + '-' + hash + '-' + path + '-file';
 
+    var ext = pathLib.extname(path);
+    if (ext.length > 0)
+        ext = ext.substring(1);
+
     var git = new GitClient(repo);
 
     var results = config.getCache(cacheKey);
     if (results === undefined) {
         git.fileAt(hash, path, function(log) {
             config.setCache(cacheKey, log);
-            res.render('blob', {name: req.params.key, hash: hash, path: path, content: log});
+            res.render('blob', {name: req.params.key, hash: hash, path: path, content: log, ext: ext});
         });
     } else {
-        res.render('blob', {name: req.params.key, hash: hash, path: path, content: results});
+        res.render('blob', {name: req.params.key, hash: hash, path: path, content: results, ext: ext});
     }
 });
 

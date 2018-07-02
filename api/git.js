@@ -1,6 +1,6 @@
 
 const simpleGit = require('simple-git');
-const EOL = require('os').EOL;
+const EOL = '\n';
 
 module.exports = class GitClient {
     constructor(workingPath) {
@@ -38,7 +38,7 @@ module.exports = class GitClient {
         var results = [];
 
         this.client.raw(['ls-tree', '-r', commit, '--name-only'], function(err, log) {
-            var contents = log.split(EOL);
+            var contents = log.split('\n');
 
             for (var i in contents) {
                 results.push({

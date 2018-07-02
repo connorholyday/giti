@@ -1,8 +1,12 @@
 include ./includes/header.pug
     
+link(rel="stylesheet" href="/prism.css")
+script(defer, src="/prism.js")
+
 .container
   h2=path
   p=hash + ' (' + name + ')'
-  pre=content
+  pre.line-numbers
+    code(class="language-" + ext)=content
         
 include ./includes/footer.pug

@@ -4,7 +4,6 @@ var dataSet = {
     port: 3000,
     maxCommits: 100,
     repos: {
-        'ILEditor': '/Users/barry/Documents/test/ILEditor.git'
     }
 }
 
