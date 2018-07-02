@@ -7,13 +7,13 @@ Git-i is a git repository browser made for IBM i (although it can run on other s
 1. `git clone https://github.com/WorksOfBarry/giti.git`
 2. `cd giti`
 3. `npm i`
-4. Edit the `dataSet` variable in `config.js` and add your existing repos. You may also want to change the port number. (step to be removed later) - `maxCommits` is used when looking at the commits of a repo. It meats X latest commits.
-5. `node index`
+4. Edit the `repos` variable in `config.json` and add your existing repos. You may also want to change the port number. `maxCommits` is used when looking at the commits of a repo. It means X latest commits.
+5. `node index` to run
 
 ## To do
 
-1. Make it so the user only edits a `config.json` file and not the actual source.
-2. Ability to add and remove repos without having to edit the config.
+1. Remove three links to Commits, Branches & Remove - create a repo dash board instead.
+2. Add button to clone into home directory and preview commands to clone onto local machine over SSH
 
 ---
 
