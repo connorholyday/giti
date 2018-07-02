@@ -3,6 +3,7 @@ const app = express();
 var pathLib = require('path');
 var fs = require('fs');
 let diff2html = require("diff2html").Diff2Html;
+var os = require("os");
 
 const CONFIG_PATH = pathLib.join(__dirname, 'config.json');
 const config = require('./api/config').obj;
@@ -177,6 +178,21 @@ app.get('/remrepo/:key', function(req, res) {
     }
 
     res.redirect('/');
+});
+
+app.get('/clone/:key', function(req, res) {
+    var name = req.params.key;
+    var repo = config.getRepo(name);
+
+    if (repo !== undefined) {
+        res.render('clone', {
+            cloneLocal: 'cd /home/USER\ngit clone ' + repo,
+            cloneRemote: 'git clone USER@' + os.hostname() + ':' + repo,
+            name: name
+        });
+    } else {
+        res.render('error', {text: 'Git repo "' + name + '" does not exist.', name: name});
+    }
 });
 
 app.listen(config.port(), () => console.log('giti listening on port ' + config.port()));

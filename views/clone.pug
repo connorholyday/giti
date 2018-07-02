@@ -1,0 +1,33 @@
+include ./includes/header.pug
+    
+.container
+  include ./includes/repohead.pug
+
+  .row
+    .col-md-2
+    .col-md-10
+      h3 Cloning
+
+  hr
+
+  .row
+    .col-md-2
+    .col-md-8
+      .panel.panel-primary
+        .panel-heading Clone on remote system
+        .panel-body
+          p Use these commands to clone this repository into a directory
+          pre=cloneLocal
+    .col-md-2
+  .row
+    .col-md-2
+    .col-md-8
+      .panel.panel-primary
+        .panel-heading Clone to different system
+        .panel-body
+          p Use these commands to clone this repository onto your local machine.
+          pre=cloneRemote
+    .col-md-2
+
+        
+include ./includes/footer.pug  
